@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ยกระดับสู่ความเป็นเลิศ: พลังแห่งการร่วมมือด้วย TPM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        :root {
+            --color-primary: #0B4F6C;
+            --color-accent: #01BAEF;
+            --color-text-dark: #333333;
+            --color-text-light: #757575;
+            --color-bg-light: #F5F5F5;
+            --color-bg-white: #FFFFFF;
+        }
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: var(--color-bg-light);
+            color: var(--color-text-dark);
+            scroll-behavior: smooth;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 450px;
+        }
+        @media (max-width: 768px) { .chart-container { height: 350px; } }
+        .workflow-step:not(:last-child)::after {
+            content: '\f061'; font-family: 'Font Awesome 6 Free'; font-weight: 900;
+            position: absolute; right: -2rem; top: 50%;
+            transform: translateY(-50%); color: var(--color-accent); font-size: 1.5rem;
+        }
+         @media (max-width: 768px) { .workflow-step:not(:last-child)::after { content: '\f063'; right: 50%; top: 100%; transform: translateX(50%) translateY(0.5rem); } }
+        .btn-filter.active { background-color: var(--color-primary); color: white; box-shadow: 0 4px 14px 0 rgba(11, 79, 108, 0.39); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.5s ease-out, padding 0.5s ease-out; }
+        .accordion-content.open { max-height: 500px; padding-top: 1rem; padding-bottom: 1rem; }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold" style="color: var(--color-primary);">ยกระดับสู่ความเป็นเลิศ</h1>
+            <p class="text-xl md:text-2xl mt-2" style="color: var(--color-accent);">ด้วยพลังแห่งการร่วมมือผ่านหลักการ Total Productive Maintenance (TPM)</p>
+        </header>
+
+        <section id="why" class="mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold" style="color: var(--color-primary);">1. ทำไมเราต้องเปลี่ยนแปลง: จากปัญหา สู่เป้าหมายร่วมกัน</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="font-bold text-xl mb-3 text-center" style="color: var(--color-primary);">มุมมองของผู้บริหาร: ความเสี่ยงทางธุรกิจ</h3>
+                    <ul class="space-y-2">
+                        <li class="flex items-start"><i class="fas fa-exclamation-triangle mt-1 mr-3" style="color: var(--color-accent);"></i><span><strong class="text-gray-700">ข้อมูลไม่แม่นยำ:</strong> กระทบการตัดสินใจและการบริหารต้นทุน</span></li>
+                        <li class="flex items-start"><i class="fas fa-industry mt-1 mr-3" style="color: var(--color-accent);"></i><span><strong class="text-gray-700">ความเสี่ยง Downtime:</strong> กระบวนการไม่มาตรฐานอาจทำให้การผลิตหยุดชะงัก</span></li>
+                        <li class="flex items-start"><i class="fas fa-chart-bar mt-1 mr-3" style="color: var(--color-accent);"></i><span><strong class="text-gray-700">วัดผลไม่ได้:</strong> ขาด KPI ทำให้ไม่เห็นโอกาสในการพัฒนา</span></li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="font-bold text-xl mb-3 text-center" style="color: var(--color-primary);">มุมมองของทีมช่าง: ความท้าทายหน้างาน</h3>
+                     <ul class="space-y-2">
+                        <li class="flex items-start"><i class="fas fa-file-excel mt-1 mr-3" style="color: var(--color-accent);"></i><span><strong class="text-gray-700">ภาระงานเอกสาร:</strong> เสียเวลากับการบันทึกข้อมูลซ้ำซ้อน</span></li>
+                        <li class="flex items-start"><i class="fas fa-list-check mt-1 mr-3" style="color: var(--color-accent);"></i><span><strong class="text-gray-700">ไม่มีมาตรฐานกลาง:</strong> ทำงานตามความคุ้นเคย อาจไม่ครอบคลุม</span></li>
+                        <li class="flex items-start"><i class="fas fa-balance-scale mt-1 mr-3" style="color: var(--color-accent);"></i><span><strong class="text-gray-700">การประเมินผลไม่ชัดเจน:</strong> ขาดข้อมูลที่ดีในการวัดผลงาน</span></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="tpm-principles" class="mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold" style="color: var(--color-primary);">2. หัวใจของความสำเร็จ: 8 เสาหลักของ TPM</h2>
+                <p class="mt-2 max-w-3xl mx-auto" style="color: var(--color-text-light);">TPM ไม่ใช่แค่หน้าที่ของฝ่ายซ่อมบำรุง แต่เป็นวัฒนธรรมที่ทุกคนต้องร่วมมือกัน คลิกที่แต่ละหัวข้อเพื่อดูรายละเอียดและตัวอย่าง</p>
+            </div>
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg space-y-4" id="tpm-accordion"></div>
+        </section>
+
+        <section id="what" class="mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold" style="color: var(--color-primary);">3. มาตรฐานใหม่: แผน PM ที่ครอบคลุมและวัดผลได้</h2>
+                <p class="mt-2 max-w-3xl mx-auto" style="color: var(--color-text-light);">เราได้สร้างแผน PM ที่เป็นมาตรฐานกลาง ครอบคลุมทุกหน่วยธุรกิจ เพื่อให้การทำงานมีทิศทางเดียวกัน</p>
+            </div>
+            <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+                <div id="chart-controls" class="flex flex-wrap justify-center gap-2 mb-6">
+                    <button data-company="overview" class="btn-filter active py-2 px-4 rounded-full text-sm font-semibold">ภาพรวม</button>
+                    <button data-company="LAK/TKB" class="btn-filter py-2 px-4 rounded-full text-sm font-semibold">ฟาร์มไก่</button>
+                    <button data-company="SM" class="btn-filter py-2 px-4 rounded-full text-sm font-semibold">ศูนย์นม</button>
+                    <button data-company="SA" class="btn-filter py-2 px-4 rounded-full text-sm font-semibold">ฟาร์มโคนม</button>
+                    <button data-company="CTC" class="btn-filter py-2 px-4 rounded-full text-sm font-semibold">โกดัง/ออฟฟิศ</button>
+                </div>
+                <h3 id="chart-title" class="font-bold text-xl text-center mb-4" style="color: var(--color-primary);"></h3>
+                <div class="chart-container">
+                    <canvas id="pmTasksChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="how" class="mb-16">
+             <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold" style="color: var(--color-primary);">4. เครื่องมือใหม่: ทำงานง่ายขึ้น เร็วขึ้น ชัดเจนขึ้น</h2>
+            </div>
+            <div class="bg-white p-8 rounded-2xl shadow-lg">
+                <div class="flex flex-col md:flex-row justify-around items-center gap-8 md:gap-4 text-center">
+                    <div class="workflow-step flex-1 mb-8 md:mb-0">
+                        <i class="fas fa-qrcode text-6xl" style="color: var(--color-primary);"></i>
+                        <h3 class="text-xl font-bold mt-4">1. สแกน (Scan)</h3>
+                        <p style="color: var(--color-text-light);">ใช้มือถือสแกน QR Code ที่เครื่องจักรเพื่อเริ่มงาน</p>
+                    </div>
+                    <div class="workflow-step flex-1 mb-8 md:mb-0">
+                        <i class="fas fa-mobile-alt text-6xl" style="color: var(--color-primary);"></i>
+                        <h3 class="text-xl font-bold mt-4">2. ทำ (Action)</h3>
+                        <p style="color: var(--color-text-light);">ทำตาม Checklist มาตรฐานที่ปรากฏใน AppSheet</p>
+                    </div>
+                    <div class="workflow-step flex-1">
+                        <i class="fas fa-cloud-upload-alt text-6xl" style="color: var(--color-primary);"></i>
+                        <h3 class="text-xl font-bold mt-4">3. เสร็จ (Complete)</h3>
+                        <p style="color: var(--color-text-light);">ข้อมูลจะถูกบันทึกและสร้างเป็นรายงานอัตโนมัติ</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold" style="color: var(--color-primary);">5. แผนการดำเนินงาน (Roadmap)</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--color-primary);">Phase 1: วางระบบ</h3>
+                    <p style="color: var(--color-text-light);">สร้างเครื่องมือและมาตรฐานกลางทั้งหมด เช่น Flow การทำงาน, Checklist, และแนวคิด Dashboard</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--color-primary);">Phase 2: ทดลองใช้</h3>
+                    <p style="color: var(--color-text-light);">เริ่มโครงการนำร่องในพื้นที่ที่เลือก เพื่อทดสอบระบบ QR Code และเก็บ Feedback มาปรับปรุง</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-xl font-bold mb-4" style="color: var(--color-primary);">Phase 3: ขยายผล</h3>
+                    <p style="color: var(--color-text-light);">จัดอบรมและขยายการใช้งานระบบใหม่ทั่วทั้งองค์กร พร้อมเปิดใช้งาน Dashboard เพื่อติดตามผล</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="challenges" class="mb-16">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold" style="color: var(--color-primary);">6. การบริหารความท้าทายเชิงรุก</h2>
+                <p class="mt-2 max-w-3xl mx-auto" style="color: var(--color-text-light);">เราได้คาดการณ์ถึงความท้าทายที่อาจเกิดขึ้นและเตรียมแนวทางรับมือไว้ล่วงหน้า เพื่อให้โครงการดำเนินไปอย่างราบรื่น</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h4 class="font-bold text-xl mb-3 flex items-center"><i class="fas fa-users w-8 text-center mr-2" style="color: var(--color-accent);"></i>ด้านคนและวัฒนธรรม</h4>
+                    <ul class="list-disc list-inside space-y-2" style="color: var(--color-text-light);">
+                        <li><strong>ความท้าทาย:</strong> รู้สึกว่าเป็นภาระเพิ่ม, ต่อต้านการเปลี่ยนแปลง</li>
+                        <li><strong>แนวทางรับมือ:</strong> สื่อสารประโยชน์โดยตรง (What's in it for them?), สร้างแกนนำการเปลี่ยนแปลง, และให้รางวัล/คำชมเชยเพื่อสร้างบรรยากาศเชิงบวก</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h4 class="font-bold text-xl mb-3 flex items-center"><i class="fas fa-cogs w-8 text-center mr-2" style="color: var(--color-accent);"></i>ด้านกระบวนการและข้อมูล</h4>
+                    <ul class="list-disc list-inside space-y-2" style="color: var(--color-text-light);">
+                        <li><strong>ความท้าทาย:</strong> ขั้นตอนใหม่ยุ่งยาก, ข้อมูลที่บันทึกอาจคลาดเคลื่อน</li>
+                        <li><strong>แนวทางรับมือ:</strong> ใช้โครงการนำร่องเพื่อทดสอบและปรับปรุง, ออกแบบฟอร์มให้ง่าย, และมีการสุ่มตรวจเพื่อรักษามาตรฐานข้อมูล</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h4 class="font-bold text-xl mb-3 flex items-center"><i class="fas fa-boxes w-8 text-center mr-2" style="color: var(--color-accent);"></i>ด้านทรัพยากร</h4>
+                    <ul class="list-disc list-inside space-y-2" style="color: var(--color-text-light);">
+                        <li><strong>ความท้าทาย:</strong> อะไหล่หรือเครื่องมือพิเศษอาจไม่เพียงพอ</li>
+                        <li><strong>แนวทางรับมือ:</strong> เชื่อมโยงแผน PM กับการจัดการสต็อกเพื่อเตรียมอะไหล่ล่วงหน้า และจัดทำตารางการใช้เครื่องมือส่วนกลาง</li>
+                    </ul>
+                </div>
+                 <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <h4 class="font-bold text-xl mb-3 flex items-center"><i class="fas fa-leaf w-8 text-center mr-2" style="color: var(--color-accent);"></i>ด้านความยั่งยืน</h4>
+                    <ul class="list-disc list-inside space-y-2" style="color: var(--color-text-light);">
+                        <li><strong>ความท้าทาย:</strong> อาจเป็น "ไฟไหม้ฟาง" ความสนใจลดลงในระยะยาว</li>
+                        <li><strong>แนวทางรับมือ:</strong> ฝัง TPM ในระบบประเมินผล, สื่อสารความสำเร็จเล็กๆ อย่างสม่ำเสมอ, และจัดประชุมทบทวนประจำเดือน</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="support" class="bg-white p-8 rounded-2xl shadow-lg">
+            <div class="text-center">
+                <i class="fas fa-hands-helping text-5xl mb-4" style="color: var(--color-primary);"></i>
+                <h2 class="text-3xl font-bold" style="color: var(--color-primary);">7. การสนับสนุนที่ต้องการ (Call for Support)</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-left mt-6">
+                    <div class="bg-gray-100 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg">สำหรับผู้บริหารและผู้จัดการ:</h4>
+                        <ul class="list-disc list-inside mt-2" style="color: var(--color-text-light);">
+                            <li>การสนับสนุนเชิงนโยบายและทรัพยากร</li>
+                            <li>การส่งเสริมวัฒนธรรม TPM ในหน่วยงาน</li>
+                        </ul>
+                    </div>
+                    <div class="bg-gray-100 p-6 rounded-lg">
+                        <h4 class="font-bold text-lg">สำหรับทีมงานและพนักงานหน้างาน:</h4>
+                        <ul class="list-disc list-inside mt-2" style="color: var(--color-text-light);">
+                            <li>การเปิดใจรับกระบวนการและเครื่องมือใหม่</li>
+                            <li>การให้ความร่วมมือในการบำรุงรักษาเบื้องต้น</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="text-center p-8 mt-12 border-t" style="border-color: #e0e0e0;">
+        <p style="color: var(--color-text-light);">&copy; 2025 Maintenance Department. Together, We Drive Excellence.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            
+            const tpmPillars = [
+                { icon: 'fa-user-cog', title: 'Autonomous Maintenance (การบำรุงรักษาด้วยตนเอง)', description: 'พนักงานผู้ใช้เครื่องจักร (Operator) สามารถดูแลรักษาเครื่องจักรของตนเองในเบื้องต้นได้ เช่น การทำความสะอาด, การหล่อลื่น, และการตรวจสอบจุดบกพร่องเล็กๆ น้อยๆ', example: 'พนักงานที่ควบคุมเครื่องลำเลียงไข่ สามารถทำความสะอาดสายพานและหยอดน้ำมันโซ่เบื้องต้นได้เองตามรอบที่กำหนด' },
+                { icon: 'fa-calendar-alt', title: 'Planned Maintenance (การบำรุงรักษาตามแผน)', description: 'ทีมช่างซ่อมบำรุงวางแผนการตรวจสอบและบำรุงรักษาเครื่องจักรตามระยะเวลาที่กำหนดไว้อย่างชัดเจน เพื่อป้องกันการชำรุดเสียหายโดยไม่คาดคิด', example: 'การวางแผน PM เครื่อง Generator เป็นรายสัปดาห์, รายเดือน, และรายปี เพื่อให้มั่นใจว่าพร้อมใช้งานเสมอและป้องกันปัญหาไฟฟ้าดับ' },
+                { icon: 'fa-award', title: 'Quality Maintenance (การบำรุงรักษาเพื่อคุณภาพ)', description: 'การบำรุงรักษาที่มุ่งเน้นการดูแลเครื่องจักรไม่ให้เกิดปัญหาด้านคุณภาพกับผลิตภัณฑ์ (Zero Defects) และสร้างเงื่อนไขที่ไม่ทำให้เกิดของเสีย', example: 'การตรวจสอบและทำความสะอาดระบบลำเลียงไข่อย่างสม่ำเสมอ เพื่อลดอัตราไข่แตกร้าว หรือการสอบเทียบ (Calibrate) Load Cell ในห้องรับน้ำนม เพื่อให้ชั่งน้ำหนักได้แม่นยำ' },
+                { icon: 'fa-lightbulb', title: 'Focused Improvement (การปรับปรุงเฉพาะเรื่อง)', description: 'การรวมกลุ่มของพนักงานจากหลายฝ่าย (เช่น ทีมช่าง, ทีมผลิต) เพื่อวิเคราะห์และแก้ไขปัญหาที่เกิดขึ้นซ้ำๆ อย่างเป็นระบบ เพื่อลดความสูญเสียให้เป็นศูนย์', example: 'หากระบบ Cooling Pad เกิดปัญหาตะกรันอุดตันบ่อยครั้ง ทีมงานอาจร่วมกันหาสาเหตุและทดลองวิธีการล้างแบบใหม่เพื่อยืดอายุการใช้งาน' },
+                { icon: 'fa-cogs', title: 'Early Equipment Management (การจัดการเครื่องจักรใหม่)', description: 'การนำความรู้และประสบการณ์จากการบำรุงรักษาเครื่องจักรปัจจุบัน ไปใช้ในการออกแบบหรือตัดสินใจเลือกซื้อเครื่องจักรใหม่ให้มีประสิทธิภาพและง่ายต่อการดูแลรักษา', example: 'เมื่อจะติดตั้งระบบให้อาหารชุดใหม่ ทีมงานจะนำข้อมูลการซ่อมของเครื่องเก่ามาพิจารณาเลือกรุ่นที่ทนทานและมีอะไหล่หาง่าย' },
+                { icon: 'fa-chalkboard-teacher', title: 'Training & Education (การฝึกอบรมและให้ความรู้)', description: 'การพัฒนาทักษะและความสามารถของพนักงานทุกระดับให้มีความรู้ความเข้าใจในการทำงานกับเครื่องจักรและการบำรุงรักษาที่ถูกต้อง', example: 'จัดอบรมให้พนักงานหน้างานรู้วิธีตรวจสอบความผิดปกติของเครื่องจักรเบื้องต้น หรืออบรมทีมช่างให้ใช้เครื่องมือพิเศษ เช่น Thermal Camera ได้อย่างมีประสิทธิภาพ' },
+                { icon: 'fa-hard-hat', title: 'Safety, Health, and Environment (ความปลอดภัยและสิ่งแวดล้อม)', description: 'การสร้างสภาพแวดล้อมการทำงานที่ปลอดภัย ปราศจากอุบัติเหตุ และเป็นมิตรต่อสิ่งแวดล้อม ซึ่งเป็นพื้นฐานที่สำคัญที่สุดของการทำงาน', example: 'การมี Checklist ตรวจสอบระบบพ่นฆ่าเชื้อ และระบบป้องกันอัคคีภัย เป็นประจำ เพื่อให้มั่นใจว่าระบบความปลอดภัยพร้อมใช้งานเสมอ' },
+                { icon: 'fa-sitemap', title: 'Office TPM (การปรับปรุงในส่วนสำนักงาน)', description: 'การนำหลักการ TPM มาปรับปรุงกระบวนการทำงานในส่วนสำนักงาน เพื่อลดความสูญเปล่าและสนับสนุนการทำงานของฝ่ายผลิตให้ราบรื่นยิ่งขึ้น', example: 'การปรับปรุง Flow การเบิก-จ่ายอะไหล่ ให้รวดเร็วและแม่นยำขึ้น หรือการใช้ AppSheet เพื่อลดขั้นตอนและกระดาษในการทำรายงาน' }
+            ];
+            const accordionContainer = document.getElementById('tpm-accordion');
+            tpmPillars.forEach((pillar) => {
+                const item = document.createElement('div');
+                item.className = 'border-b border-gray-200';
+                item.innerHTML = `
+                    <button class="accordion-trigger w-full text-left p-4 focus:outline-none">
+                        <div class="flex justify-between items-center">
+                            <h4 class="font-bold text-lg flex items-center" style="color: var(--color-primary);"><i class="fas ${pillar.icon} w-8 text-center mr-3" style="color: var(--color-accent);"></i>${pillar.title}</h4>
+                            <i class="fas fa-chevron-down transform transition-transform"></i>
+                        </div>
+                    </button>
+                    <div class="accordion-content px-4" style="color: var(--color-text-light);">
+                        <p class="mb-2">${pillar.description}</p>
+                        <p class="p-3 bg-gray-100 rounded-md text-sm"><strong class="text-gray-600">ตัวอย่างการนำไปใช้:</strong> ${pillar.example}</p>
+                    </div>`;
+                accordionContainer.appendChild(item);
+            });
+            document.querySelectorAll('.accordion-trigger').forEach(trigger => {
+                trigger.addEventListener('click', function() {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('.fa-chevron-down');
+                    document.querySelectorAll('.accordion-content.open').forEach(openContent => {
+                        if (openContent !== content) {
+                            openContent.classList.remove('open');
+                            openContent.previousElementSibling.querySelector('.fa-chevron-down').classList.remove('rotate-180');
+                        }
+                    });
+                    content.classList.toggle('open');
+                    icon.classList.toggle('rotate-180');
+                });
+            });
+
+            const pmData = {
+                frequencies: ['รายสัปดาห์', 'รายเดือน', 'ราย 3 เดือน', 'ราย 6 เดือน', 'รายปี'],
+                colors: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'],
+                overview: {
+                    title: 'ภาพรวม PM Tasks ตามความถี่',
+                    labels: ['ฟาร์มไก่', 'ศูนย์นม', 'ฟาร์มโคนม', 'โกดัง/ออฟฟิศ'],
+                    data: [
+                        [30, 15, 4, 0],    // Weekly
+                        [70, 40, 4, 10],   // Monthly
+                        [50, 25, 0, 12],   // Quarterly
+                        [35, 17, 2, 5],    // Semi-annually
+                        [23, 10, 2, 4]     // Annually
+                    ]
+                },
+                'LAK/TKB': {
+                    title: 'PM Tasks ตามความถี่: ฟาร์มไก่ (LAK/TKB)',
+                    labels: ['ไฟฟ้า', 'อากาศ', 'การผลิต', 'น้ำ', 'ปุ๋ย', 'คัดไข่', 'ลมอัด', 'ความปลอดภัย'],
+                    data: [
+                        [5, 4, 2, 8, 1, 2, 4, 4],
+                        [15, 10, 15, 5, 4, 8, 4, 9],
+                        [10, 12, 12, 4, 4, 5, 2, 1],
+                        [8, 6, 10, 2, 3, 4, 1, 1],
+                        [3, 3, 6, 1, 3, 3, 1, 3]
+                    ]
+                },
+                'SM': {
+                    title: 'PM Tasks ตามความถี่: ศูนย์รับน้ำนมดิบ (SM)',
+                    labels: ['ไฟฟ้า', 'รับนม', 'ทำความเย็น', 'CIP', 'น้ำ/บำบัด', 'ลมอัด', 'สนับสนุน'],
+                    data: [
+                        [4, 0, 2, 0, 2, 5, 2],
+                        [8, 8, 8, 2, 4, 5, 5],
+                        [5, 8, 7, 3, 2, 0, 0],
+                        [3, 5, 6, 3, 0, 0, 0],
+                        [2, 4, 5, 2, 4, 0, 3]
+                    ]
+                },
+                'SA': {
+                    title: 'PM Tasks ตามความถี่: ฟาร์มโคนม (S.A. Farm)',
+                    labels: ['Generator'],
+                    data: [ [4], [4], [0], [2], [2] ]
+                },
+                'CTC': {
+                    title: 'PM Tasks ตามความถี่: โกดัง/ออฟฟิศ (CTC)',
+                    labels: ['ระบายอากาศ', 'ไฟฟ้าโกดัง', 'ไฟฟ้าออฟฟิศ', 'แสงสว่าง'],
+                    data: [
+                        [0, 0, 0, 0],
+                        [4, 2, 0, 4],
+                        [2, 2, 4, 4],
+                        [1, 2, 2, 0],
+                        [1, 1, 3, 0]
+                    ]
+                }
+            };
+            
+            const chartTitleEl = document.getElementById('chart-title');
+            const chartCanvas = document.getElementById('pmTasksChart').getContext('2d');
+            let pmChart;
+            let currentCompany = 'overview';
+
+            const wrapLabel = (label) => {
+                if (label.length <= 16) return label;
+                const words = label.replace(/\s+/g, ' ').split(' ');
+                let currentLine = ''; const lines = [];
+                words.forEach(word => {
+                    if ((currentLine + ' ' + word).trim().length > 16 && currentLine.length > 0) { lines.push(currentLine); currentLine = word; } 
+                    else { currentLine = (currentLine + ' ' + word).trim(); }
+                });
+                if (currentLine) lines.push(currentLine);
+                return lines;
+            };
+
+            const createChart = () => {
+                if (pmChart) pmChart.destroy();
+                
+                const dataConfig = pmData[currentCompany];
+                chartTitleEl.textContent = dataConfig.title;
+                
+                const datasets = pmData.frequencies.map((freq, index) => ({
+                    label: freq,
+                    data: dataConfig.data[index],
+                    backgroundColor: pmData.colors[index]
+                }));
+
+                pmChart = new Chart(chartCanvas, {
+                    type: 'bar',
+                    data: {
+                        labels: dataConfig.labels.map(label => wrapLabel(label)),
+                        datasets: datasets
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        plugins: { legend: { position: 'bottom' }, tooltip: { backgroundColor: '#0B4F6C', titleFont: { size: 16, family: 'Sarabun' }, bodyFont: { size: 14, family: 'Sarabun' }, padding: 12, callbacks: { title: function(tooltipItems) { const item = tooltipItems[0]; let label = item.chart.data.labels[item.dataIndex]; return Array.isArray(label) ? label.join(' ') : label; } } } },
+                        scales: { y: { beginAtZero: true, stacked: true, grid: { color: '#e0e0e0', drawBorder: false }, ticks: { font: { size: 12, family: 'Sarabun' }, color: '#757575' } }, x: { stacked: true, grid: { display: false }, ticks: { font: { size: 12, family: 'Sarabun' }, color: '#333333' } } }
+                    }
+                });
+            };
+            
+            document.getElementById('chart-controls').addEventListener('click', (e) => {
+                if (e.target.tagName === 'BUTTON') {
+                    currentCompany = e.target.dataset.company;
+                    document.querySelectorAll('#chart-controls .btn-filter').forEach(btn => btn.classList.remove('active'));
+                    e.target.classList.add('active');
+                    createChart();
+                }
+            });
+
+            createChart();
+        });
+    </script>
+</body>
+</html>
